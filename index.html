@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Automatic Insight Searcher</title>
+  <meta charset="UTF-8">
+  <style>
+    button {
+      margin-top: 10px;
+    }
+
+    input[type=text] {
+      width: 200px;
+      border: none;
+      border-bottom: 2px solid red;
+      padding: 5px 5px;
+    }
+
+    input[type=date] {
+      width: auto;
+      border: none;
+      border-bottom: 2px solid red;
+      padding: 5px;
+    }
+
+    .lblTop {
+      margin-top: 15px;
+      display: block;
+    }
+
+    #copyright {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    /* Float the list items side by side */
+
+    ul.tab li {
+      float: left;
+    }
+
+    /* Style the links inside the list items */
+
+    ul.tab li a {
+      display: inline-block;
+      color: black;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+
+    /* Change background color of links on hover */
+
+    ul.tab li a:hover {
+      background-color: #ddd;
+    }
+
+    /* Create an active/current tablink class */
+
+    ul.tab li a:focus,
+    .active {
+      background-color: #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="configuration" style="text-align: left">
+    <form>
+      <label for="date-picker-planning" class="lblTop">date planing</label>
+      <input name="date-picker-planning" type="date" id="date-picker-planning" />
+    </form>
+    <button id="post-button" onclick="activatePosting()">Planen</button>
+    <button id="scrape-button" onclick="performQuery()">scrape</button>
+
+    <br />
+    <form>
+      <label for="date-picker-search" class="lblTop">date search</label>
+      <input name="date-picker-search" type="date" id="date-picker-search" />
+      <br />
+      <label for="date-picker-search-until" class="lblTop">date search</label>
+      <input name="date-picker-search-until" type="date" id="date-picker-search-until" />
+    </form>
+    <form>
+      <label for="date-picker-insights-from" class "lblTop">date evaluation start</label>
+      <input name="date-picker-insights-from" type="date" id="date-picker-insights-from" />
+      <label for="date-picker-insights-to" class "lblTop">end</label>
+      <input name="date-picker-insights-to" type="date" id="date-picker-insights-to" />
+    </form>
+    <button id="evaluate-button" onclick="getPageIdList()">Evaluate</button>
+    <button id="transfer-button">Transfer</button>
+    <br />
+    <button id="authorize-button" style="display: none;">Authorize</button>
+    <button id="signout-button" style="display: none;">Sign Out</button>
+    <input name="access-token-user" type="text" maxlength="512" id="userAccessToken" />
+    <br />
+    <fb:login-button scope="public_profile" onlogin="checkLoginState()"></fb:login-button>
+
+    <table id="ranking" style="width: auto; overflow: auto">
+    </table>
+  </div>
+
+  <!-- <script type="text/javascript">
+    $(document).ready(function() {
+      $("#transfer-button").click(function(e) {
+        $.ajax({
+          url: 'connectDatabase.php',
+          type: 'post',
+          cache: false,
+          data: "post_id=" + "298823714",
+          success: function(response) {
+            console.log(response);
+          }
+           e.preventDefault();
+
+           data: "post_id=" + "298823713" + "&post_caption=" + "NULL" + "&post_permalink=" + "" + "&post_status_type=" + "" +
+          "&post_created_time=" + 0 + "&post_link_clicks=" + 0 + "&post_other_clicks=" + 0 +
+          "&post_impressions_unique=" + 0 + "&post_like_total=" + 0 + "&post_comment=" + 0 +
+          "&post_share=" + 0 + "&post_reaction_like=" + 0 + "&post_reaction_love=" + 0 +
+          "&post_reaction_wow=" + 0 + "&post_reaction_haha=" + 0 + "&post_reaction_sorry=" + 0 +
+          "&post_reaction_anger=" + 0 + "&post_hide_all_clicks=" + 0 + "&post_hide_clicks=" + 0 +
+          "&post_video_views_organic=" + 0,
+        });
+      });
+    });
+    var date=$("#date").val();
+    var fans_total=$("#fans_total").val();
+    var fans_added_total=$("#fans_added_total").val();
+ </script> -->
+
+  <script>
+    var page_id_list = ["WirLiebenTiereOfficial", 860380367476369, "Tiere.Katzen.Hunde", "BunteTierwelt", "Hundewau", 763915633763905, "TierfreundeOfficial", 1668018533226317];
+    var date = new Date();
+
+    document.getElementById('date-picker-insights-to').valueAsDate = date;
+    document.getElementById('date-picker-search-until').valueAsDate = date;
+    date.setDate(date.getDate() - 2);
+    document.getElementById('date-picker-search').valueAsDate = date;
+    document.getElementById('date-picker-insights-from').valueAsDate = date;
+    date.setDate(date.getDate() + 3);
+    document.getElementById('date-picker-planning').valueAsDate = date;
+  </script>
+  <script src="dateHelper.js"></script>
+
+  <script src="loginFacebook.js"></script>
+  <script src="planPosts.js"></script>
+  <script src="insertPosts.js"></script>
+  <script src="evaluatePosts.js"></script>
+  <script src="scraper.js"></script>
+
+  <div id="copyright">
+    &copy; 2017 - Alle Rechte vorbehalten
+  </div>
+</body>
+
+</html>
