@@ -4,108 +4,83 @@
 <head>
   <title>Automatic Insight Searcher</title>
   <meta charset="UTF-8">
-  <style>
-    button {
-      margin-top: 10px;
-    }
-
-    input[type=text] {
-      width: 200px;
-      border: none;
-      border-bottom: 2px solid red;
-      padding: 5px 5px;
-    }
-
-    input[type=date] {
-      width: auto;
-      border: none;
-      border-bottom: 2px solid red;
-      padding: 5px;
-    }
-
-    .lblTop {
-      margin-top: 15px;
-      display: block;
-    }
-
-    #copyright {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    body {
-      font-family: "Lato", sans-serif;
-    }
-
-    /* Float the list items side by side */
-
-    ul.tab li {
-      float: left;
-    }
-
-    /* Style the links inside the list items */
-
-    ul.tab li a {
-      display: inline-block;
-      color: black;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      transition: 0.3s;
-      font-size: 17px;
-    }
-
-    /* Change background color of links on hover */
-
-    ul.tab li a:hover {
-      background-color: #ddd;
-    }
-
-    /* Create an active/current tablink class */
-
-    ul.tab li a:focus,
-    .active {
-      background-color: #ccc;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="dateHelper.js"></script>
+  <script src="loginFacebook.js"></script>
+  <script src="planPosts.js"></script>
+  <script src="insertPosts.js"></script>
+  <script src="caller.js"></script>
+  <script src="evaluatePosts.js"></script>
+  <script src="scraper.js"></script>
+  <script src="mustache.js"></script>
+  <script src="modalViewer.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
-  <div id="configuration" style="text-align: left">
-    <form>
-      <label for="date-picker-planning" class="lblTop">date planing</label>
-      <input name="date-picker-planning" type="date" id="date-picker-planning" />
-    </form>
-    <button id="post-button" onclick="activatePosting()">Planen</button>
-    <button id="scrape-button" onclick="performQuery()">scrape</button>
+  <div id="modal-view" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2 id="modal-title" />
+      </div>
+      <div class="modal-body">
+        <div class="tab" id="posting-plan">
+          <button class="tablinks" onclick="openPlan(event, 'plan_1')" id="defaultPlan">Plan 1</button>
+          <button class="tablinks" onclick="openPlan(event, 'plan_2')">Plan 2</button>
+          <button class="tablinks" onclick="openPlan(event, 'plan_3')">Plan 3</button>
+        </div>
+        <div id="plan_1" class="tabcontent"></div>
+        <div id="plan_2" class="tabcontent"></div>
+        <div id="plan_3" class="tabcontent"></div>
+        <div class="tab" id="page-pool">
+          <button class="tablinks" onclick="openPool(event, 'pool_1')" id="defaultPool">Pool 1</button>
+          <button class="tablinks" onclick="openPool(event, 'pool_2')">Pool 2</button>
+          <button class="tablinks" onclick="openPool(event, 'pool_3')">Pool 3</button>
+        </div>
+        <div id="pool_1" class="tabcontent"></div>
+        <div id="pool_2" class="tabcontent"></div>
+        <div id="pool_3" class="tabcontent"></div>
+        <p id="modal-content" />
+      </div>
+    </div>
+  </div>
+  <button class="btn" id="postingPlan" onclick="showPostingPlan()"><i class="fa fa-tasks"></i> Posting Plan</button>
+  <button class="btn" id="pagePool" onclick="showPagePool()"><i class="fa fa-archive"></i> Page Pool</button>
+  <form>
+    <label for="date-picker-planning" class="lblTop">date planing</label>
+    <input name="date-picker-planning" type="date" id="date-picker-planning" />
+  </form>
+  <button id="post-button" onclick="activatePosting()">Planen</button>
+  <button id="scrape-button" onclick="performQuery()">scrape</button>
 
+  <br />
+  <form>
+    <label for="date-picker-search" class="lblTop">date search</label>
+    <input name="date-picker-search" type="date" id="date-picker-search" />
     <br />
-    <form>
-      <label for="date-picker-search" class="lblTop">date search</label>
-      <input name="date-picker-search" type="date" id="date-picker-search" />
-      <br />
-      <label for="date-picker-search-until" class="lblTop">date search</label>
-      <input name="date-picker-search-until" type="date" id="date-picker-search-until" />
-    </form>
-    <form>
-      <label for="date-picker-insights-from" class "lblTop">date evaluation start</label>
-      <input name="date-picker-insights-from" type="date" id="date-picker-insights-from" />
-      <label for="date-picker-insights-to" class "lblTop">end</label>
-      <input name="date-picker-insights-to" type="date" id="date-picker-insights-to" />
-    </form>
-    <button id="evaluate-button" onclick="getPageIdList()">Evaluate</button>
-    <button id="transfer-button">Transfer</button>
-    <br />
-    <button id="authorize-button" style="display: none;">Authorize</button>
-    <button id="signout-button" style="display: none;">Sign Out</button>
-    <input name="access-token-user" type="text" maxlength="512" id="userAccessToken" />
-    <br />
-    <fb:login-button scope="public_profile" onlogin="checkLoginState()"></fb:login-button>
+    <label for="date-picker-search-until" class="lblTop">date search</label>
+    <input name="date-picker-search-until" type="date" id="date-picker-search-until" />
+  </form>
+  <form>
+    <label for="date-picker-insights-from" class "lblTop">date evaluation start</label>
+    <input name="date-picker-insights-from" type="date" id="date-picker-insights-from" />
+    <label for="date-picker-insights-to" class "lblTop">end</label>
+    <input name="date-picker-insights-to" type="date" id="date-picker-insights-to" />
+  </form>
+  <button id="evaluate-button" onclick="getPageIdList()">Evaluate</button>
+  <button id="transfer-button">Transfer</button>
+  <br />
+  <button id="authorize-button" style="display: none;">Authorize</button>
+  <button id="signout-button" style="display: none;">Sign Out</button>
+  <input name="access-token-user" type="text" maxlength="512" id="userAccessToken" />
+  <br />
+  <fb:login-button scope="public_profile" onlogin="checkLoginState()"></fb:login-button>
 
-    <table id="ranking" style="width: auto; overflow: auto">
-    </table>
+  <table id="ranking" style="width: auto; overflow: auto">
+  </table>
   </div>
 
   <!-- <script type="text/javascript">
@@ -137,6 +112,23 @@
  </script> -->
 
   <script>
+    var modal = document.getElementById('modal-view');
+    var close = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the modal
+    close.onclick = function() {
+      modal.style.display = "none";
+      saveVisiblePostingPlanEntries();
+      saveVisiblePagePoolEntries();
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+        saveVisiblePostingPlanEntries();
+        saveVisiblePagePoolEntries();
+      }
+    }
+
     var page_id_list = ["WirLiebenTiereOfficial", 860380367476369, "Tiere.Katzen.Hunde", "BunteTierwelt", "Hundewau", 763915633763905, "TierfreundeOfficial", 1668018533226317];
     var date = new Date();
 
@@ -148,16 +140,9 @@
     date.setDate(date.getDate() + 3);
     document.getElementById('date-picker-planning').valueAsDate = date;
   </script>
-  <script src="dateHelper.js"></script>
-
-  <script src="loginFacebook.js"></script>
-  <script src="planPosts.js"></script>
-  <script src="insertPosts.js"></script>
-  <script src="evaluatePosts.js"></script>
-  <script src="scraper.js"></script>
 
   <div id="copyright">
-    &copy; 2017 - Alle Rechte vorbehalten
+    &copy; 2018 - Alle Rechte vorbehalten
   </div>
 </body>
 

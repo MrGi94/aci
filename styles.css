@@ -1,0 +1,380 @@
+/* The button style */
+
+.btn {
+  background-color: #FF7575;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  : 2px 2px 4px #111111;
+}
+
+.btn:hover {
+  background-color: #FF4848;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.24), 0 10px 15px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* The Modal (background)*/
+
+.modal {
+  /* Hidden by default */
+  display: none;
+  /* Stay in place */
+  position: fixed;
+  /* Sit on top */
+  z-index: 1;
+  /* Location of the box */
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  /* Full width & height */
+  width: 100%;
+  height: 100%;
+  max-height: calc(100vh - 100px);
+  /* Enable scroll if needed */
+  overflow-y: auto;
+  /* Fallback color */
+  background-color: rgb(0, 0, 0);
+  /* Black w/ opacity */
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content */
+
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0
+  }
+  to {
+    top: 0;
+    opacity: 1
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0
+  }
+  to {
+    top: 0;
+    opacity: 1
+  }
+}
+
+/* The Close Button */
+
+.close {
+  color: white;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #FF7575;
+  color: white;
+}
+
+.modal-body {
+  padding: 2px 16px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+input[type=date] {
+  width: auto;
+  border: none;
+  border-bottom: 2px solid red;
+  padding: 5px;
+}
+
+.lblTop {
+  margin-top: 15px;
+  display: block;
+}
+
+#copyright {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin: 0 auto;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+}
+
+/* Float the list items side by side */
+
+ul.tab li {
+  float: left;
+}
+
+/* Style the links inside the list items */
+
+ul.tab li a {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of links on hover */
+
+ul.tab li a:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+
+ul.tab li a:focus,
+.active {
+  background-color: #ccc;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #FF7575;
+  color: white;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+}
+
+/* Style the header */
+.planHeader {
+  background-color: #FF7575;
+  padding: 20px 20px;
+  
+}
+
+/* Clear floats after the header */
+.planHeader:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the input */
+.planTime {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  padding: 8.5px;
+  float: left;
+  font-size: 14px;
+}
+
+/* Style the "Add" button */
+.planAddEntry {
+  padding: 7.5px;
+  width: 5%;
+  background-color: #ddd;
+  float: left;
+  margin-left: 10px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+}
+
+.planAddEntry:hover {
+  background-color: #bbb;
+}
+
+.planCategory {
+  padding: 10px;
+  font-size: 14px;
+  margin-left: 10px;
+  float: left;
+  border: none;
+}
+
+/* Remove margins and padding from the list */
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the list items */
+ul li {
+    cursor: pointer;
+    position: relative;
+    padding: 12px 8px 12px 40px;
+    background: #eee;
+    font-size: 14px;
+    transition: 0.2s;
+    list-style-type: none;
+    /* make the list items unselectable */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Set all odd list items to a different color (zebra-stripes) */
+ul li:nth-child(odd) {
+    background: #f9f9f9;
+}
+
+/* Darker background-color on hover */
+ul li:hover {
+    background: #ddd;
+}
+
+ul li.dragElem {
+  opacity: 0.4;
+}
+
+ul li.over {
+  border-top: 2px solid #FF4848;
+}
+
+/* Style the close button */
+.close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: white;
+    background-color: #FF7575;
+    padding: 6px 10px 6px 10px;
+}
+
+.close:hover {
+    background-color: #FF4848;
+    color: white;
+}
+
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+/* Style the "Add" button */
+.pageAddEntry {
+  padding: 4px 4px 4px 4px;
+  width: 5%;
+  background-color: #ddd;
+  float: left;
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+}
+
+.pageAddEntry:hover {
+  background-color: #bbb;
+}
+
+.poolList{
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 30%;
+  padding: 10px 10px 10px 10px;
+  float: left;
+  font-size: 14px;
+}
+
+.poolSource{
+  margin-left: 50px;
+  border: none;
+  border-radius: 0;
+  width: 30%;
+  padding: 10px 10px 10px 10px;
+  float: left;
+  font-size: 14px;
+}
+
+.ulPages{
+  display: inline-block;
+  zoom: 1;
+  margin: 0;
+  width: 45%;
+}
+
+/* Style the list items */
+.ulPages li {
+    cursor: pointer;
+    position: relative;
+    padding: 12px 8px 12px 8px;
+    background: #eee;
+    font-size: 14px;
+    transition: 0.2s;
+    text-align: left;
+    list-style-type: none;
+    /* make the list items unselectable */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.poolPlan{
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+}
