@@ -75,6 +75,8 @@
   <br />
   <button id="authorize-button" style="display: none;">Authorize</button>
   <button id="signout-button" style="display: none;">Sign Out</button>
+  <button id="test">Test send source</button>
+  <button id="test2">Test run</button>
   <input name="access-token-user" type="text" maxlength="512" id="userAccessToken" />
   <br />
   <fb:login-button scope="public_profile" onlogin="checkLoginState()"></fb:login-button>
@@ -113,6 +115,8 @@
 
   <script>
     var modal = document.getElementById('modal-view');
+    var test = document.getElementById('test');
+    var test2 = document.getElementById('test2');
     var close = document.getElementsByClassName("close")[0];
     // When the user clicks on <span> (x), close the modal
     close.onclick = function() {
@@ -127,6 +131,12 @@
         saveVisiblePostingPlanEntries();
         saveVisiblePagePoolEntries();
       }
+    }
+    test.onclick = function() {
+      accessSettings("", "readPageSource");
+    }
+    test2.onclick = function() {
+      runProgram();
     }
 
     var page_id_list = ["WirLiebenTiereOfficial", 860380367476369, "Tiere.Katzen.Hunde", "BunteTierwelt", "Hundewau", 763915633763905, "TierfreundeOfficial", 1668018533226317];

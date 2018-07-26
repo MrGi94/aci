@@ -6,6 +6,7 @@ if (isset($_POST['func2call']) && !empty($_POST['func2call'])) {
         case "writePoolPlan": writePoolPlan(); break;
         case "writePageList": writePageList(); break;
         case "readPagePool": readPagePool(); break;
+        case "readPageSource": readPageSource(); break;
     }
 }
 
@@ -99,7 +100,8 @@ function readPagePool()
         $sql_plan = "SELECT plan_id FROM page_pool WHERE pool_id='$data'";
         $result = $mysqli->query($sql);
         $result_plan = $mysqli->query($sql_plan);
-        //$sqlDelete = "DELETE FROM page_list WHERE pool_id='$data'";
+        $sql_delete = "DELETE FROM page_list WHERE pool_id='$data'";
+        $mysqli->query($sql_delete);
         $rows = array();
         $rows_plan = array();
         if ($result->num_rows !== null and $result_plan->num_rows !== null) {
@@ -116,4 +118,22 @@ function readPagePool()
         }
         $mysqli->close();
     }
+}
+
+
+function readPageSource()
+{
+    require "connectToDatabase.php";
+    $sql = "SELECT page_name, pool_id FROM page_list WHERE is_source = 1";
+    $result = $mysqli->query($sql);
+    $rows = array();
+    if ($result->num_rows !== null) {
+        while ($r = mysqli_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    } else {
+        echo "0";
+    }
+    $mysqli->close();
 }

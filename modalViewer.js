@@ -1,4 +1,4 @@
-/*global document, Mustache, addDnDHandlers, accessSettings, alert, scrapeData */
+/*global document, Mustache, addDnDHandlers, accessSettings, alert */
 
 function setModalPage(checkPostingPlan, title, defaultName) {
     "use strict";
@@ -333,25 +333,26 @@ function newPage() {
     "use strict";
     var li = document.createElement("li"),
         ul = document.getElementById("ul_page"),
-        page = document.getElementById("pageName").value;
+        page = document.getElementById("pageName");
 
-    if (page !== "" && !copyExists(ul, page)) {
-        li.innerHTML = getPoolEntryTemplate(page);
+    if (page.value !== "" && !copyExists(ul, page.value)) {
+        li.innerHTML = getPoolEntryTemplate(page.value);
         ul.appendChild(li);
     }
+    page.value = "";
 }
 
 function newSource() {
     "use strict";
     var li = document.createElement("li"),
         ul = document.getElementById("ul_source"),
-        source = document.getElementById("sourceName").value;
+        source = document.getElementById("sourceName");
 
-    if (source !== "" && !copyExists(ul, source)) {
-        li.innerHTML = getPoolEntryTemplate(source);
+    if (source.value !== "" && !copyExists(ul, source.value)) {
+        li.innerHTML = getPoolEntryTemplate(source.value);
         ul.appendChild(li);
     }
-    scrapeData();
+    source.value = "";
 }
 
 function updatePoolPlan() {

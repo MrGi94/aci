@@ -1,4 +1,39 @@
-/*global $, addPlanEntries, addPoolEntries */
+/*global $, addPlanEntries, addPoolEntries, console, alert */
+
+function sendSourcesToServer(sources) {
+    "use strict";
+    $.ajax({
+        url: "http://127.0.0.1:5000/storePageSources",
+        type: "post",
+        data: sources,
+        contentType: "application/json",
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (error) {
+            console.log(error);
+            alert("Error: Transfer page sources failed");
+        }
+    });
+}
+
+
+function runProgram() {
+    "use strict";
+    $.ajax({
+        url: "http://127.0.0.1:5000/run",
+        type: "post",
+        contentType: "application/json",
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (error) {
+            console.log(error);
+            alert("Error: Transfer page sources failed");
+        }
+    });
+}
+
 
 function accessSettings(data, func2call) {
     "use strict";
@@ -11,29 +46,19 @@ function accessSettings(data, func2call) {
         },
         success: function (data) {
             if (data !== undefined && !data.match("<?php")) {
-                if (func2call === "readPostingPlan") {
+                switch (func2call) {
+                case "readPostingPlan":
                     addPlanEntries(JSON.parse(data));
-                } else if (func2call === "readPagePool") {
+                    break;
+                case "readPagePool":
                     var data_split = data.split(";");
                     addPoolEntries(JSON.parse(data_split[0]), JSON.parse(data_split[1]));
+                    break;
+                case "readPageSource":
+                    sendSourcesToServer(data);
+                    break;
                 }
             }
-        }
-    });
-}
-
-function scrapeData() {
-    "use strict";
-    $.ajax({
-        url: "http://mrgi.pythonanywhere.com/",
-        type: "post",
-        data: "param",
-        dataType: "json",
-        success: function (response) {
-            alert(response);
-        },
-        error: function (error) {
-            alert("Error: " + error);
         }
     });
 }
