@@ -7,6 +7,8 @@ if (isset($_POST['func2call']) && !empty($_POST['func2call'])) {
         case "writePageList": writePageList(); break;
         case "readPagePool": readPagePool(); break;
         case "readPageSource": readPageSource(); break;
+        case "deletePageEntry": deletePageEntry(); break;
+        case "deletePlanEntry": deletePlanEntry(); break;
     }
 }
 
@@ -37,14 +39,14 @@ function readPostingPlan()
     if ($data !== null) {
         $sql = "SELECT entry_time as time, entry_category as category FROM posting_plan WHERE plan_id='$data'";
         $result = $mysqli->query($sql);
-        $sqlDelete = "DELETE FROM posting_plan WHERE plan_id='$data'";
+        //$sqlDelete = "DELETE FROM posting_plan WHERE plan_id='$data'";
         $rows = array();
         if ($result->num_rows !== null) {
             while ($r = mysqli_fetch_assoc($result)) {
                 $rows[] = $r;
             }
             echo json_encode($rows);
-            $mysqli->query($sqlDelete);
+        //$mysqli->query($sqlDelete);
         } else {
             echo "0";
         }
@@ -100,8 +102,8 @@ function readPagePool()
         $sql_plan = "SELECT plan_id FROM page_pool WHERE pool_id='$data'";
         $result = $mysqli->query($sql);
         $result_plan = $mysqli->query($sql_plan);
-        $sql_delete = "DELETE FROM page_list WHERE pool_id='$data'";
-        $mysqli->query($sql_delete);
+        //$sql_delete = "DELETE FROM page_list WHERE pool_id='$data'";
+        //$mysqli->query($sql_delete);
         $rows = array();
         $rows_plan = array();
         if ($result->num_rows !== null and $result_plan->num_rows !== null) {
@@ -120,7 +122,6 @@ function readPagePool()
     }
 }
 
-
 function readPageSource()
 {
     require "connectToDatabase.php";
@@ -134,6 +135,41 @@ function readPageSource()
         echo json_encode($rows);
     } else {
         echo "0";
+    }
+    $mysqli->close();
+}
+
+function deletePageEntry()
+{
+    require "connectToDatabase.php";
+    $data = isset($_POST['data']) ? $_POST['data'] : null;
+    if ($data !== null) {
+        $page_name=$data['page_name'];
+        $pool_id=$data['pool_id'];
+        $sql = "DELETE FROM page_list WHERE pool_id='$pool_id' AND page_name='$page_name'";
+        if ($mysqli->query($sql) === true) {
+            echo "page entry deleted";
+        } else {
+            echo "Error: " . $sql . $mysqli->error;
+        }
+    }
+    $mysqli->close();
+}
+
+function deletePlanEntry()
+{
+    require "connectToDatabase.php";
+    $data = isset($_POST['data']) ? $_POST['data'] : null;
+    if ($data !== null) {
+        $plan_id=$data['plan_id'];
+        $entry_time=$data['entry_time'];
+        $entry_category=$data['entry_category'];
+        $sql = "DELETE FROM posting_plan WHERE plan_id='$plan_id' AND entry_time='$entry_time' AND entry_category='$entry_category'";
+        if ($mysqli->query($sql) === true) {
+            echo "posting plan entry deleted";
+        } else {
+            echo "Error: " . $sql . $mysqli->error;
+        }
     }
     $mysqli->close();
 }

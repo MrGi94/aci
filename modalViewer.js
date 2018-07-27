@@ -87,8 +87,8 @@ function hideTabContents() {
 
     for (i = 0; i < tabcontent.length; i = i + 1) {
         tabcontent[i].style.display = "none";
-        saveVisiblePostingPlanEntries();
-        saveVisiblePagePoolEntries();
+        //saveVisiblePostingPlanEntries();
+        //saveVisiblePagePoolEntries();
         tabcontent[i].innerHTML = "";
     }
     tablinks = document.getElementsByClassName("tablinks");
@@ -134,9 +134,19 @@ function openPlan(e, planName) {
     e.currentTarget.className += " active";
 }
 
-function closeEntry(e) {
+function deletePostingPlanEntry(e) {
     "use strict";
-    e.currentTarget.parentElement.remove();
+    var parent_element = e.currentTarget.parentElement,
+        time = parent_element.children[0].innerText,
+        category = parent_element.children[1].innerText,
+        plan_id = parent_element.parentElement.parentElement.id.slice(-1),
+        data = {
+            "plan_id": plan_id,
+            "entry_time": time,
+            "entry_category": category
+        };
+    accessSettings(data, "deletePlanEntry");
+    parent_element.remove();
 }
 
 function getPostingPlanEntry(time, category) {
@@ -149,7 +159,7 @@ function getPostingPlanEntry(time, category) {
     template = [
         '<label id="time"> {{time}}',
         '</label> | <label id="category"> {{category}} </label>',
-        '<span class="close" onclick="closeEntry(event)">',
+        '<span class="close" onclick="deletePostingPlanEntry(event)">',
         '\u00D7</span>'
     ].join("\n");
 
@@ -223,6 +233,7 @@ function handleDragEnd() {
     });*/
 }
 
+/* Add Drag & Drop functionality */
 function addDnDHandlers(elem) {
     "use strict";
     elem.addEventListener("dragstart", handleDragStart, false);
@@ -233,6 +244,18 @@ function addDnDHandlers(elem) {
     elem.addEventListener("dragend", handleDragEnd, false);
 }
 
+/* Store new posting plan entry in database */
+function saveNewPostingPlanEntry(time, category, plan_id) {
+    "use strict";
+    var data = {
+        "plan_id": plan_id,
+        "entry_time": time,
+        "entry_category": category
+    };
+    accessSettings(data, "writePostingPlan");
+}
+
+/* Add new entry to the plan view */
 function newElement() {
     "use strict";
     var li = document.createElement("li"),
@@ -247,8 +270,10 @@ function newElement() {
     li.innerHTML = getPostingPlanEntry(time, category);
     addDnDHandlers(li);
     ul.appendChild(li);
+    saveNewPostingPlanEntry(time, category, ul.parentNode.id.slice(-1));
 }
 
+/* Create template based plan entries */
 function addPlanEntries(data) {
     "use strict";
     var i, li, ul = document.getElementById("ul_plan");
@@ -280,9 +305,9 @@ function getPagePoolHeader(poolName) {
         '<option value="3">Plan 3</option>',
         '</select><p/>',
         '<input type="text" class="poolList" id="pageName" placeholder="Page...">',
-        '<span onclick="newPage()" class="pageAddEntry">+</span>',
+        '<span onclick="newPage(0)" class="pageAddEntry">+</span>',
         '<input type="text" class="poolSource" id="sourceName" placeholder="Source...">',
-        '<span onclick="newSource()" class="pageAddEntry">+</span>',
+        '<span onclick="newPage(1)" class="pageAddEntry">+</span>',
         '</div>',
         '<ul id="ul_page" class="ulPages"></ul>',
         '<ul id="ul_source" class="ulPages"></ul>'
@@ -302,6 +327,19 @@ function openPool(e, poolName) {
     e.currentTarget.className += " active";
 }
 
+function deletePageEntry(e) {
+    "use strict";
+    var parent_element = e.currentTarget.parentElement,
+        page_name = parent_element.firstChild.innerText,
+        pool_id = parent_element.parentElement.parentElement.id.slice(-1),
+        data = {
+            "pool_id": pool_id,
+            "page_name": page_name
+        };
+    accessSettings(data, "deletePageEntry");
+    parent_element.remove();
+}
+
 function getPoolEntryTemplate(page) {
     "use strict";
     var template, data = {
@@ -310,7 +348,7 @@ function getPoolEntryTemplate(page) {
 
     template = [
         '<label id="page">{{page}}</label>',
-        '<span class="close" onclick="closeEntry(event)">',
+        '<span class="close" onclick="deletePageEntry(event)">',
         '\u00D7</span>'
     ].join("\n");
 
@@ -329,19 +367,39 @@ function copyExists(node, name) {
     return false;
 }
 
-function newPage() {
+/* Store new page entry in database */
+function saveNewPageEntry(page_name, source, pool_id) {
     "use strict";
-    var li = document.createElement("li"),
-        ul = document.getElementById("ul_page"),
+    var data = {
+        "pool_id": pool_id,
+        "page_name": page_name,
+        "is_source": source
+    };
+    accessSettings(data, "writePageList");
+}
+
+/* Add new page to the page view */
+function newPage(source) {
+    "use strict";
+    var page, ul, li = document.createElement("li");
+
+    if (source === 0) {
         page = document.getElementById("pageName");
+        ul = document.getElementById("ul_page");
+    } else {
+        page = document.getElementById("sourceName");
+        ul = document.getElementById("ul_source");
+    }
 
     if (page.value !== "" && !copyExists(ul, page.value)) {
         li.innerHTML = getPoolEntryTemplate(page.value);
         ul.appendChild(li);
+        saveNewPageEntry(page.value, source, ul.parentNode.id.slice(-1));
     }
     page.value = "";
 }
 
+/* Add new source to the page view */
 function newSource() {
     "use strict";
     var li = document.createElement("li"),

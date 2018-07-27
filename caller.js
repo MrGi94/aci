@@ -17,6 +17,24 @@ function sendSourcesToServer(sources) {
     });
 }
 
+function getPostingsFromServer(pool_id) {
+    "use strict";
+    $.ajax({
+        url: "http://127.0.0.1:5000/getPagePostings",
+        type: "get",
+        data: {
+            "id": pool_id
+        },
+        contentType: "application/json",
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (error) {
+            console.log(error);
+            alert("Error: Transfer page postings failed");
+        }
+    });
+}
 
 function runProgram() {
     "use strict";
@@ -33,7 +51,6 @@ function runProgram() {
         }
     });
 }
-
 
 function accessSettings(data, func2call) {
     "use strict";
@@ -57,8 +74,14 @@ function accessSettings(data, func2call) {
                 case "readPageSource":
                     sendSourcesToServer(data);
                     break;
+                case "deletePlanEntry":
+                    console.log(data);
+                    break;
                 }
             }
+        },
+        error: function (error) {
+            console.log(error);
         }
     });
 }
